@@ -1,31 +1,115 @@
 <% layout("/layouts/boilerplate") %>
-<%=success%>
+  <%=success%>
 
-<body>
-  <h3>Following are the titles for all the listings:</h3>
-  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
-    <% for (let list of allListings) { %>
-    <a
-      href="/listings/<%= list._id %>"
-      style="text-decoration: none; color: inherit"
-    >
-      <div class="card col listing-card" style="margin: 10px">
-        <img
-          src="<%= list.image?.url %>"
-          class="card-img-top"
-          alt="Listing-image"
-          style="height: 20rem"
-        />
-        <div class="card-img-overlay">abc</div>
-        <div class="card-body">
-          <p class="card-text">
-            <%= list.title %><br />
-            &#8377; <%= list.price ?
-            Math.round(list.price).toLocaleString('en-IN') : "0" %>/night
-          </p>
+    <body>
+      <style>
+        #filters {
+          display: flex;
+          flex-wrap: wrap;
+        }
+
+        .filter {
+          text-align: center;
+          margin-right: 2rem;
+          opacity: 0.7;
+        }
+
+        .filter:hover {
+          opacity: 1;
+        }
+
+        #tax-togle {
+          display: inline;
+        }
+
+        .tax-toggle {
+          border: 1px solid black;
+          padding: 0.5rem 1rem;
+          border-radius: 2rem;
+          height: fit-content;
+          margin-left: auto;
+          margin-right: 2rem;
+          margin-top: 1rem;
+        }
+      </style>
+      <div id="filters" class="ms-3 mt-3 d-flex">
+        <div class="filter ms-3 mt-3">
+          <div><i class="fa-solid fa-fire"></i></div>
+          <p>Trending</p>
         </div>
+        <div class="filter ms-3 mt-3">
+          <div><i class="fa-solid fa-bed"></i></div>
+          <p>Rooms</p>
+        </div>
+        <div class="filter ms-3 mt-3">
+          <div><i class="fa-solid fa-mountain-city"></i></div>
+          <p>Iconic Cities</p>
+        </div>
+        <div class="filter ms-3 mt-3">
+          <div><i class="fa-solid fa-mountain"></i></i></div>
+          <p>Mountains</p>
+        </div>
+        <div class="filter ms-3 mt-3">
+          <div><i class="fa-brands fa-fort-awesome"></i></i></div>
+          <p>Castle</p>
+        </div>
+        <div class="filter ms-3 mt-3">
+          <div><i class="fa-solid fa-person-swimming"></i></div>
+          <p>Pools</p>
+        </div>
+        <div class="filter ms-3 mt-3">
+          <div><i class="fa-solid fa-campground"></i></div>
+          <p>Camping</p>
+        </div>
+        <div class="filter ms-3 mt-3">
+          <div><i class="fa-solid fa-tractor"></i></div>
+          <p>Farms</p>
+        </div>
+        <div class="filter ms-3 mt-3">
+          <div><i class="fa-brands fa-galactic-republic"></i></div>
+          <p>Arctic</p>
+        </div>
+
+        <div class="tax-toggle">
+          <div class="form-check-reverse form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+            <label class="form-check-label" for="switchCheckDefault">Display Total after Taxes</label>
+          </div>
+        </div>
+
       </div>
-    </a>
-    <% } %>
-  </div>
-</body>
+      <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 ms-3 mt-2">
+        <% for (let list of allListings) { %>
+          <a href="/listings/<%= list._id %>" style="text-decoration: none; color: inherit">
+            <div class="card col listing-card" style="margin: 10px">
+              <img src="<%= list.image?.url %>" class="card-img-top" alt="Listing-image" style="height: 20rem" />
+              <div class="card-img-overlay">abc</div>
+              <div class="card-body">
+                <p class="card-text">
+                  <%= list.title %><br />
+                    &#8377; <%= list.price ? Math.round(list.price).toLocaleString('en-IN') : "0" %>/night
+                      <i id="tax-togle">&nbsp;&nbsp;+18 GST </i>
+                </p>
+
+              </div>
+            </div>
+          </a>
+          <% } %>
+      </div>
+    </body>
+
+    <script>
+      let taxtswitch = document.getElementById('switchCheckDefault');
+      taxtswitch.addEventListener("click", () => {
+        let taxinfo = document.querySelectorAll('#tax-togle');
+        taxinfo.forEach((tax) => {
+          if (tax.style.display != "inline") {
+            tax.style.display = "inline";
+          } else {
+            tax.style.display = "none";
+          }
+        })
+      })
+
+
+    </script>

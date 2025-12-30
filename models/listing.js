@@ -9,12 +9,8 @@ const ListingSchema = new Schema({
   },
   description: String,
   image: {
-    filename: { type: String, default: "listingimage" },
-    url: {
-      type: String,
-      default:
-        "https://unsplash.com/photos/white-sports-car-parked-on-a-golden-surface-6R8L09tbjOo",
-    },
+    url: String,
+    filename: String,
   },
   price: Number,
   location: String,

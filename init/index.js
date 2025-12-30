@@ -18,7 +18,7 @@ async function main(){
 const initDB = async () =>{
     await Listing.deleteMany({});
     initData.data = initData.data.map(listing => { 
-        listing.owner = "692186e43d281dfce29d9c6b"; // Replace with a valid User ObjectId from your database
+        listing.owner = "69258633717638eb9cdccc49"; // Replace with a valid User ObjectId from your database
         return listing;
     });
     await Listing.insertMany(initData.data);

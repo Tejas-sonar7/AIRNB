@@ -5,56 +5,30 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const passport = require("passport");
 const { saveRedirectUrl } = require("../middelware.js");
 
-router.get("/signup", (req, res) => {
-  res.render("users/signup.ejs");
-});
+const userController = require("../cotrollers/user.js");
+const user = require("../models/user.js");
+// Signup routes
+router
+  .route("/signup")
+  .get(userController.indexuser)
+  .post(saveRedirectUrl, wrapAsync(userController.createUser));
 
-router.post(
-  "/signup",saveRedirectUrl,
-  wrapAsync(async (req, res) => {
-    try {
-      let { email, username, password } = req.body;
-      let user = new User({ email, username });
-      let registeredUser = await User.register(user, password);
-      console.log(registeredUser);
-      req.login(registeredUser, (err) => {
-        if (err) {return next(err)};
-        req.flash("success", "Welcome to AIRNB!");
-        let redirectUrl = res.locals.redirectUrl || "/listings";
-        res.redirect(redirectUrl);
-      });
-    } catch (e) {
-      req.flash("error", e.message);
-      res.redirect("signup");x  
-    }
-  })
-);
+// Login routes
 
-router.get("/login", (req, res) => {
-  res.render("users/login.ejs");
-});
+router
+  .route("/login")
+  .get(userController.loginUser)
+  .post(
+    saveRedirectUrl,
+    passport.authenticate("local", {
+      failureFlash: true,
+      failureRedirect: "/login",
+    }),
+    userController.loginUserPost
+  );
 
-router.post(
-  "/login",saveRedirectUrl,
-  passport.authenticate("local", {
-    failureFlash: true,
-    failureRedirect: "/login",
-  }),
-  (req, res) => {
-    req.flash("success", "Welcome back!");
-    let redirectUrl = res.locals.redirectUrl || "/listings";
-    res.redirect(redirectUrl);
-  }
-);
+// Logout route
 
-router.get("/logout", (req, res, next) => {
-  req.logout((err) => {
-    if (err) {
-      return next(err);
-    }
-    req.flash("success", "Logged you out!");
-    res.redirect("/listings");
-  });
-});
+router.get("/logout", userController.logoutUser);
 
 module.exports = router;
