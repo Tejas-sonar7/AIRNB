@@ -98,6 +98,11 @@ app.use("/listings/:id/reviews", reviews);
 app.use("/api", apiRoutes);
 app.use("/", userRoutes);
 
+app.get("/", (req, res) => {
+  res.redirect("/listings");
+});
+
+
 // Catch-all 404 handler
 app.use((req, res, next) => {
   next(new ExpressError(404, "Page Not Found!"));
@@ -109,6 +114,8 @@ app.use((err, req, res, next) => {
   res.status(statusCode).send(message);
 });
 
-app.listen(8080, () => {
-  console.log("server running on port 8080");
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
+
